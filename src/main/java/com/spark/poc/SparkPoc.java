@@ -1,22 +1,38 @@
 package com.spark.poc;
 
-import org.apache.spark.sql.Dataset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.spark.sql.SparkSession;
+
+import com.spark.poc.quick.start.SimpleApp;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SparkPoc {
     public static void main(String[] args) {
-        String logFile = "/spark/README.md";
         SparkSession spark = SparkSession.builder().appName("Spark Poc").getOrCreate();
-        Dataset<String> logData = spark.read().textFile(logFile).cache();
+        List<Poc> pocList = new ArrayList<>();
+        pocList.add(new SimpleApp());
 
-        long numAs = logData.filter(s->s.contains("a")).count();
-        long numBs = logData.filter(s->s.contains("b")).count();
+        List<String> inputArgs = null;
+        if (args != null && args.length > 0) {
+            inputArgs = Arrays.asList(args[0].split(","));
+        }
 
-        log.info("Lines with a: "+numAs+", lines with b: "+numBs);
+        for (int i = 0; i < pocList.size(); i++) {
+            if (inputArgs != null && !inputArgs.contains(String.valueOf(i))) {
+                continue;
+            }
 
-        //spark.read().format("json").option("multiline",true).json("");
+            Poc poc = pocList.get(i);
+            String className = poc.getClass().getName();
+            log.info("----------------" + className + "----------------");
+            poc.execute(spark);
+            log.info("----------------" + className + "----------------");
+
+        }
     }
 }

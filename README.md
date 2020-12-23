@@ -47,11 +47,11 @@ Run below command in bash shell of master container.
 /opt/spark-apps/spark-poc-jar-with-dependencies.jar
 ```
 
-If the environment is good. You will see the debugging log of this Poc in bash shell of master
+If the environment is good. You will see the debugging logs of this Poc in bash shell of master
  container.
 
 ![debug log](./docs/poc_log.jpg)
 
-Refresh the http://127.0.0.1:9090/. You will see a complete application.
+Refresh the http://127.0.0.1:9090/. You will see a completed application.
 
 ![task_complete_web_gui](./docs/spark_task_complete_web_gui.jpg)
