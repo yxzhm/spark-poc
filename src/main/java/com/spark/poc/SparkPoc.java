@@ -3,22 +3,20 @@ package com.spark.poc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.spark.sql.SparkSession;
-
-import com.spark.poc.quick.start.SimpleApp;
-import com.spark.poc.rdd.RddBasic;
+import org.reflections.Reflections;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SparkPoc {
-    public static void main(String[] args) {
-        SparkSession spark = SparkSession.builder().appName("Spark Poc").getOrCreate();
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
         List<Poc> pocList = getPocList();
 
         List<String> inputArgs = getInputArgs(args);
-
+        SparkSession spark = SparkSession.builder().appName("Spark Poc").getOrCreate();
         for (int i = 0; i < pocList.size(); i++) {
             if (inputArgs != null && !inputArgs.contains(String.valueOf(i))) {
                 continue;
@@ -33,10 +31,15 @@ public class SparkPoc {
         }
     }
 
-    private static List<Poc> getPocList() {
+    private static List<Poc> getPocList() throws IllegalAccessException, InstantiationException {
+        Reflections reflections = new Reflections("com.spark.poc");
+        Set<Class<? extends Poc>> subClasses = reflections.getSubTypesOf(Poc.class);
+
         List<Poc> pocList = new ArrayList<>();
-        pocList.add(new SimpleApp());
-        pocList.add(new RddBasic());
+        for (Class<? extends Poc> subClass : subClasses) {
+            Poc poc = subClass.newInstance();
+            pocList.add(poc);
+        }
         return pocList;
     }
 
