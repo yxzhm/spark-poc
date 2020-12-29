@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.storage.StorageLevel;
 
 import com.spark.poc.Poc;
 
@@ -26,5 +27,7 @@ public class RddBasic extends Poc {
         JavaRDD<String> distFile = sc.textFile("/spark/README.md");
         Integer sumOfReadMe = distFile.map(String::length).reduce(Integer::sum);
         log.info("ReamMe string length is {}", sumOfReadMe);
+
+        distFile.persist(StorageLevel.MEMORY_AND_DISK());
     }
 }
