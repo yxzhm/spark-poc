@@ -35,6 +35,7 @@ public class SimpleApp extends Poc {
         JavaPairRDD<String, Integer> counts = data.flatMap(x -> Arrays.asList(x.split(" ")).iterator())
                 .mapToPair(word -> new Tuple2<>(word, 1))
                 .reduceByKey(Integer::sum);
-        counts.saveAsTextFile("/opt/spark-data/word_count");
+//        counts.saveAsTextFile("/opt/spark-data/word_count");
+        counts.collect().forEach(System.out::println);
     }
 }
