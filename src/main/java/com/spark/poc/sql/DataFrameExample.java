@@ -9,7 +9,7 @@ import org.apache.spark.sql.SparkSession;
 
 import com.spark.poc.Poc;
 
-public class DataFrame extends Poc {
+public class DataFrameExample extends Poc {
     @Override
     protected void execute(SparkSession spark) throws AnalysisException {
         Dataset<Row> df = spark.read().json("/opt/spark-data/people.json");

@@ -13,7 +13,7 @@ import com.spark.poc.Poc;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RddBasic extends Poc {
+public class RddBasicExample extends Poc {
     @Override
     protected void execute(SparkSession spark) {
         JavaSparkContext sc = JavaSparkContext.fromSparkContext(spark.sparkContext());
