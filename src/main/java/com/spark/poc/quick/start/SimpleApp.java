@@ -31,11 +31,10 @@ public class SimpleApp extends Poc {
         long numCs = logData.filter(s -> s.contains("c")).count();
         log.info("Lines with a: " + numAs + ", lines with b: " + numBs + ", lines with c: " + numCs);
 
-        JavaRDD<String> data = spark.sparkContext().textFile(logFile,5).toJavaRDD();
+        JavaRDD<String> data = spark.sparkContext().textFile(logFile,2).toJavaRDD();
         JavaPairRDD<String, Integer> counts = data.flatMap(x -> Arrays.asList(x.split(" ")).iterator())
                 .mapToPair(word -> new Tuple2<>(word, 1))
                 .reduceByKey(Integer::sum);
-        counts.saveAsTextFile("/opt/spark-data/word_count.txt");
-
+        counts.saveAsTextFile("/opt/spark-data/word_count");
     }
 }
